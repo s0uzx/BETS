@@ -72,5 +72,55 @@ suspeitosRoutes.get("/:id", (req, res) => {
     return res.status(200).send({ message: "Suspeito encontrado", suspeito });
 });
 
+// Rota para atualizar um suspeito pelo id
+suspeitosRoutes.put("/:id", (req, res) => {
+    const { id } = req.params;
+    const { nome, profissao, envolvimento, nivelSus, } = req.body;
+
+
+    // Busca um suspeito pelo id no array de suspeitos
+    const suspeito = suspeitos.find((suspeito) => suspeito.id == id);
+
+
+    // Verifica se o suspeito foi encontrado
+    if (!suspeito) {
+        return res
+            .status(404)
+            .json({ message: `Suspeito com id ${id} não encontrado!` });
+    }
+
+
+    // Validação dos campos nome e profissao
+    if (!nome || !profissao) {
+        return res.status(400).send({
+            message: "O nome ou a profissão não foi preenchido, criança aleatória!",
+        });
+    }
+    //validação do Nível de Suspeita
+    if (nivelSus != "Baixo" && nivelSus != "Médio" && nivelSus != "Alto") {
+        return res.status(400).send({ message: "O nível de suspeita não coincide com as opções." })
+    }
+
+
+    if (envolvimento != "Sim" && envolvimento != "Não") {
+        return res.status(400).send({ message: "Não foi possível constatar o envolvimento do suspeito." })
+    }
+
+
+    suspeito.nome = nome;
+    suspeito.profissao = profissao;
+    suspeito.envolvimento = envolvimento;
+    suspeito.nivelSus = nivelSus;
+
+
+
+
+    return res.status(200).json({
+        message: "Suspeito atualizado com sucesso!",
+        suspeito,
+    });
+});
+
+
 export default suspeitosRoutes;
 
