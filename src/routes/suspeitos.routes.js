@@ -121,6 +121,32 @@ suspeitosRoutes.put("/:id", (req, res) => {
     });
 });
 
+//Deletar Suspeito
+suspeitosRoutes.delete("/:id", (req, res) => {
+    const { id } = req.params;
+
+
+    // Busca um candidato pelo id no array de candidatos
+    const suspeito = suspeitos.find((suspeito) => suspeito.id == id);
+
+
+    // Verifica se o candidato foi encontrado
+    if (!suspeito) {
+        return res
+            .status(404)
+            .json({ message: `Suspeito com id ${id} não encontrado!` });
+    }
+
+
+    // Remove o suspeito do array de suspeitos
+    suspeitos = suspeitos.filter((suspeito) => suspeito.id != id);
+
+
+    return res.status(200).json({
+        message: "Suspeito removido com sucesso!",
+        suspeito,
+    });
+});
 
 export default suspeitosRoutes;
 
